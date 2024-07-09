@@ -4,3 +4,4 @@ google-cloud-storage==2.12.0
 weaviate-client==3.24.2
 llama-cpp-python==0.2.11
 llama_index==0.8.46
+defusedxml==0.7.1
