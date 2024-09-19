@@ -21,6 +21,7 @@ from pathlib import Path
 from google.cloud import storage
 import re
 import fitz  # PyMuPDF
+from security import safe_requests
 
 
 def query_weaviate(client, website, timestamp, query):
@@ -313,7 +314,7 @@ def get_sitemap_attributes(url):
     error_message= ""
     nested_sitemap_flag = False
     try:
-        with requests.get(url, headers=headers) as response:
+        with safe_requests.get(url, headers=headers) as response:
             soup = BeautifulSoup(response.text, 'lxml-xml')
             urls = [link.text.strip() for link in soup.find_all('loc') if link]
 
@@ -331,7 +332,7 @@ def get_sitemap_attributes(url):
             if link.endswith('xml'):
                 nested_sitemap_flag = True
                 try:
-                    with requests.get(link, headers=headers) as response:
+                    with safe_requests.get(link, headers=headers) as response:
                         response.raise_for_status()  # Check if the request was successful
                         nested_soup = BeautifulSoup(response.text, 'lxml-xml')
                         nested_urls = [url.text.strip() for url in nested_soup.find_all('loc') if url]
@@ -412,7 +413,7 @@ def scrape_link(link):
     browser = None  # Initialize browser to avoid crash
 
     try:
-        with requests.get(link, headers=headers, stream=True) as response:
+        with safe_requests.get(link, headers=headers, stream=True) as response:
             content_type = response.headers.get('Content-Type', '')
             if 'application/pdf' in content_type:
                 try:
