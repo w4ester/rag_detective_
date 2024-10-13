@@ -1,8 +1,9 @@
 import xml.etree.ElementTree as ET
+import defusedxml.ElementTree
 
 def extract_urls_from_sitemap(sitemap_file):
     # Parse the XML file
-    tree = ET.parse(sitemap_file)
+    tree = defusedxml.ElementTree.parse(sitemap_file)
     root = tree.getroot()
 
     # Find all URL elements
