@@ -313,7 +313,7 @@ def get_sitemap_attributes(url):
     error_message= ""
     nested_sitemap_flag = False
     try:
-        with requests.get(url, headers=headers) as response:
+        with requests.get(url, headers=headers, timeout=60) as response:
             soup = BeautifulSoup(response.text, 'lxml-xml')
             urls = [link.text.strip() for link in soup.find_all('loc') if link]
 
@@ -331,7 +331,7 @@ def get_sitemap_attributes(url):
             if link.endswith('xml'):
                 nested_sitemap_flag = True
                 try:
-                    with requests.get(link, headers=headers) as response:
+                    with requests.get(link, headers=headers, timeout=60) as response:
                         response.raise_for_status()  # Check if the request was successful
                         nested_soup = BeautifulSoup(response.text, 'lxml-xml')
                         nested_urls = [url.text.strip() for url in nested_soup.find_all('loc') if url]
@@ -412,7 +412,7 @@ def scrape_link(link):
     browser = None  # Initialize browser to avoid crash
 
     try:
-        with requests.get(link, headers=headers, stream=True) as response:
+        with requests.get(link, headers=headers, stream=True, timeout=60) as response:
             content_type = response.headers.get('Content-Type', '')
             if 'application/pdf' in content_type:
                 try:
