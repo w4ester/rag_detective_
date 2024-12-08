@@ -8,9 +8,9 @@ Typical usage example from command line:
 import os
 import argparse
 from glob import glob
-import random
 import string
 import google.cloud.aiplatform as aip
+import secrets
 
 GCP_PROJECT = os.environ["GCP_PROJECT"]
 GCS_PACKAGE_URI = os.environ["GCS_PACKAGE_URI"]
@@ -19,7 +19,7 @@ GCS_BUCKET_NAME = os.environ["GCS_BUCKET_NAME"]
 
 
 def generate_uuid(length: int = 8) -> str:
-    return "".join(random.choices(string.ascii_lowercase + string.digits, k=length))
+    return "".join(secrets.SystemRandom().choices(string.ascii_lowercase + string.digits, k=length))
 
 
 def main(args=None):
