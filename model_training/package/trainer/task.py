@@ -1,7 +1,6 @@
 
 # Import necessary libraries
 import os
-import requests
 import zipfile
 import tarfile
 import time
@@ -30,6 +29,7 @@ import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import backend as K
 from tensorflow.keras.callbacks import EarlyStopping
+from security import safe_requests
 
 # Ensure we have a GPU
 print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
@@ -65,7 +65,7 @@ def download_file(packet_url, base_path="", extract=False, headers=None):
         if not os.path.exists(base_path):
             os.mkdir(base_path)
     packet_file = os.path.basename(packet_url)
-    with requests.get(packet_url, stream=True, headers=headers) as r:
+    with safe_requests.get(packet_url, stream=True, headers=headers) as r:
         r.raise_for_status()
         with open(os.path.join(base_path, packet_file), "wb") as f:
             for chunk in r.iter_content(chunk_size=8192):
