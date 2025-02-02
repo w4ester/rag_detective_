@@ -65,7 +65,7 @@ def download_file(packet_url, base_path="", extract=False, headers=None):
         if not os.path.exists(base_path):
             os.mkdir(base_path)
     packet_file = os.path.basename(packet_url)
-    with requests.get(packet_url, stream=True, headers=headers) as r:
+    with requests.get(packet_url, stream=True, headers=headers, timeout=60) as r:
         r.raise_for_status()
         with open(os.path.join(base_path, packet_file), "wb") as f:
             for chunk in r.iter_content(chunk_size=8192):

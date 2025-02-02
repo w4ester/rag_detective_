@@ -46,7 +46,7 @@ def scrape_sitemap(url):
     pd.Series: A pandas Series with all the links, or None if no links found.
     """
     try:
-        with requests.get(url, headers=headers) as response:
+        with requests.get(url, headers=headers, timeout=60) as response:
             response.raise_for_status()  # Check if the request was successful
             soup = BeautifulSoup(response.text, 'lxml-xml')
             urls = [link.text.strip() for link in soup.find_all('loc') if link]
@@ -58,7 +58,7 @@ def scrape_sitemap(url):
             for link in urls:
                 if link.endswith('xml'):
                     try:
-                        with requests.get(link, headers=headers) as response:
+                        with requests.get(link, headers=headers, timeout=60) as response:
                             response.raise_for_status()  # Check if the request was successful
                             nested_soup = BeautifulSoup(response.text, 'lxml')
                             nested_urls = [url.text.strip() for url in nested_soup.find_all \
@@ -100,7 +100,7 @@ def scrape_website(all_links, options):
     for link in all_links.to_list():
         try:
             # First, scrape the page using requests
-            with requests.get(link, headers=headers) as response:
+            with requests.get(link, headers=headers, timeout=60) as response:
                 if response.status_code == 200:
                     soup = BeautifulSoup(response.text, 'lxml')
 
